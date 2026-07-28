@@ -26,17 +26,21 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/admin", adminRoutes);
 
-connectDB().catch(console.error);
-
-if (!process.env.VERCEL) {
-  app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-  });
-
-  process.on("SIGINT", async () => {
-    await closeDB();
-    process.exit(0);
-  });
+async function start() {
+  try {
+    await connectDB();
+    app.listen(PORT, () => {
+      console.log(`Server running on http://localhost:${PORT}`);
+    });
+  } catch (err) {
+    console.error("Failed to start server:", err);
+    process.exit(1);
+  }
 }
 
-export default app;
+start();
+
+process.on("SIGINT", async () => {
+  await closeDB();
+  process.exit(0);
+});
