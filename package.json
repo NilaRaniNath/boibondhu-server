@@ -2,11 +2,11 @@
   "name": "boibondhu-server",
   "version": "1.0.0",
   "description": "Backend API for BoiBondhu bookstore",
-  "main": "dist/server.js",
+  "main": "dist/index.js",
   "scripts": {
-    "dev": "tsx watch -r dotenv/config src/server.ts",
+    "dev": "tsx watch -r dotenv/config src/index.ts",
     "build": "tsc",
-    "start": "node -r dotenv/config dist/server.js",
+    "start": "node -r dotenv/config dist/index.js",
     "seed": "tsx src/scripts/seed.ts"
   },
   "keywords": [],
