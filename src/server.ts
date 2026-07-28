@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -14,14 +15,6 @@ const PORT = process.env.PORT || 5000;
 app.use(cors({ origin: process.env.CLIENT_URL || "http://localhost:3000", credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
-
-app.get("/", (_req, res) => {
-  res.json({ success: true, message: "BoiBondhu API is running" });
-});
-
-app.get("/favicon.ico", (_req, res) => {
-  res.status(204).end();
-});
 
 app.get("/api/health", (_req, res) => {
   res.json({ status: "ok", message: "BoiBondhu API is running" });
