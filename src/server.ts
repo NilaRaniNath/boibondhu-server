@@ -1,4 +1,3 @@
-import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -27,6 +26,10 @@ app.use("/api/reviews", reviewRoutes);
 app.use("/api/admin", adminRoutes);
 
 connectDB().catch(console.error);
+
+if (!process.env.VERCEL) {
+  require("dotenv/config");
+}
 
 if (!process.env.VERCEL) {
   app.listen(PORT, () => {
