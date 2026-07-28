@@ -33,11 +33,11 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/admin", adminRoutes);
 
-connectDB().catch(console.error);
-
 if (!process.env.VERCEL) {
   require("dotenv/config");
 }
+
+connectDB().catch(console.error);
 
 if (!process.env.VERCEL) {
   app.listen(PORT, () => {
