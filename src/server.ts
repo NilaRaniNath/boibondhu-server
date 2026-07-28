@@ -19,6 +19,10 @@ app.get("/", (_req, res) => {
   res.json({ success: true, message: "BoiBondhu API is running" });
 });
 
+app.get("/favicon.ico", (_req, res) => {
+  res.status(204).end();
+});
+
 app.get("/api/health", (_req, res) => {
   res.json({ status: "ok", message: "BoiBondhu API is running" });
 });
