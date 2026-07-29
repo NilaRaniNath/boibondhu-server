@@ -1,3 +1,4 @@
 module.exports = (req, res) => {
-  res.json({ ok: true, url: req.url });
+  res.setHeader('Content-Type', 'application/json');
+  res.end(JSON.stringify({ ok: true, url: req.url }));
 };
