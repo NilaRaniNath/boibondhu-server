@@ -1,26 +1,23 @@
 const express = require('express');
 const app = express();
+const results = [];
 
-try {
-  require('mongodb');
-  console.log('mongodb loaded');
-} catch(e) {
-  console.log('mongodb failed:', e.message);
+function testRequire(name) {
+  try {
+    require(name);
+    results.push({ name, ok: true });
+  } catch (e) {
+    results.push({ name, ok: false, error: e.message });
+  }
 }
 
-try {
-  require('zod');
-  console.log('zod loaded');
-} catch(e) {
-  console.log('zod failed:', e.message);
-}
+testRequire('mongodb');
+testRequire('zod');
+testRequire('bcryptjs');
+testRequire('jsonwebtoken');
+testRequire('cookie-parser');
+testRequire('cors');
+testRequire('dotenv');
 
-try {
-  require('bcryptjs');
-  console.log('bcryptjs loaded');
-} catch(e) {
-  console.log('bcryptjs failed:', e.message);
-}
-
-app.get('/', (req, res) => res.json({ ok: true }));
+app.get('/', (req, res) => res.json({ ok: true, results }));
 module.exports = app;
