@@ -1,7 +1,3 @@
 {
-  "version": 2,
-  "buildCommand": "echo 'no build needed'",
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/api/index.js" }
-  ]
+  "version": 2
 }
