@@ -1,4 +1,3 @@
-import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -15,6 +14,19 @@ app.use(cors({ origin: process.env.CLIENT_URL || "http://localhost:3000", creden
 app.use(express.json());
 app.use(cookieParser());
 
+let dbConnected = false;
+app.use(async (_req, _res, next) => {
+  if (!dbConnected) {
+    try {
+      await connectDB();
+      dbConnected = true;
+    } catch (err) {
+      console.error("Failed to connect to DB:", err);
+    }
+  }
+  next();
+});
+
 app.get("/", (_req, res) => {
   res.json({ success: true, message: "BoiBondhu API is running" });
 });
@@ -29,9 +41,8 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/admin", adminRoutes);
 
-connectDB().catch(console.error);
-
 if (!process.env.VERCEL) {
+  connectDB().catch(console.error);
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
