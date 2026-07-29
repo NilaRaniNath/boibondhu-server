@@ -1,9 +1,16 @@
 {
   "version": 2,
-  "buildCommand": "npm run build",
-  "functions": {
-    "index.js": {
-      "includeFiles": "**"
+  "buildCommand": "npx esbuild src/index.ts --bundle --platform=node --outfile=bundle.js",
+  "builds": [
+    {
+      "src": "index.js",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": ["bundle.js"]
+      }
     }
-  }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "index.js" }
+  ]
 }

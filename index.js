@@ -1,2 +1,1 @@
-const app = require('./dist/index').default;
-module.exports = app;
+module.exports = require('./bundle').default;
