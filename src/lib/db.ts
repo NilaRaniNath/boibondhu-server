@@ -26,9 +26,10 @@ export async function connectDB(): Promise<Db> {
   return connecting;
 }
 
-export function getDB(): Db {
-  if (!db) throw new Error("Database not initialized. Call connectDB() first.");
-  return db;
+export async function getDB(): Promise<Db> {
+  if (db) return db;
+  if (connecting) return connecting;
+  throw new Error("Database not initialized. Call connectDB() first.");
 }
 
 export async function closeDB(): Promise<void> {

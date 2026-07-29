@@ -7,7 +7,7 @@ const router = Router();
 
 router.get("/stats", requireAuth, requireAdmin, async (_req: Request, res: Response): Promise<void> => {
   try {
-    const db = getDB();
+    const db = await getDB();
     const usersCol = db.collection("users");
     const booksCol = db.collection<Book>("books");
     const ordersCol = db.collection<Order>("orders");
@@ -75,7 +75,7 @@ router.get("/stats", requireAuth, requireAdmin, async (_req: Request, res: Respo
 
 router.get("/users", requireAuth, requireAdmin, async (_req: Request, res: Response): Promise<void> => {
   try {
-    const db = getDB();
+    const db = await getDB();
 
     const users = await db
       .collection("users")

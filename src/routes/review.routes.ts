@@ -22,7 +22,7 @@ router.get("/:bookId", async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const db = getDB();
+    const db = await getDB();
     const reviews = await db
       .collection<Review>("reviews")
       .aggregate([
@@ -64,7 +64,7 @@ router.post("/", requireAuth, async (req: Request, res: Response): Promise<void>
       return;
     }
 
-    const db = getDB();
+    const db = await getDB();
     const ordersCol = db.collection<Order>("orders");
     const reviewsCol = db.collection<Review>("reviews");
     const booksCol = db.collection("books");

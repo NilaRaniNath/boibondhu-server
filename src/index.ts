@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { connectDB, closeDB } from "./lib/db";
@@ -14,7 +14,17 @@ app.use(cors({ origin: process.env.CLIENT_URL || "http://localhost:3000", creden
 app.use(express.json());
 app.use(cookieParser());
 
-connectDB().catch(err => console.error("DB connection failed:", err));
+let dbReady = false;
+connectDB()
+  .then(() => { dbReady = true; })
+  .catch(err => console.error("DB connection failed:", err));
+
+app.use("/api", (req: Request, res: Response, next: NextFunction) => {
+  if (!dbReady && req.path !== "/health" && req.path !== "/debug") {
+    return res.status(503).json({ message: "Database not ready. Try again." });
+  }
+  next();
+});
 
 app.get("/.well-known/appspecific/com.chrome.devtools.json", (_req, res) => res.status(204).end());
 app.get("/favicon.ico", (_req, res) => res.status(204).end());

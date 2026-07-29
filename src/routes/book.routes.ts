@@ -44,7 +44,7 @@ const updateBookSchema = z.object({
 
 router.get("/", async (req: Request, res: Response): Promise<void> => {
   try {
-    const db = getDB();
+    const db = await getDB();
     const books = db.collection<Book>("books");
 
     const {
@@ -120,7 +120,7 @@ router.get("/:id", async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const db = getDB();
+    const db = await getDB();
     const book = await db.collection<Book>("books").findOne({
       _id: new ObjectId(id),
       isActive: true,
@@ -154,7 +154,7 @@ router.post(
       const { images, coverImage, ...rest } = parsed.data;
       const finalCoverImage = coverImage || (images && images.length > 0 ? images[0] : "");
 
-      const db = getDB();
+      const db = await getDB();
       const now = new Date();
 
       const result = await db.collection<Book>("books").insertOne({
@@ -198,7 +198,7 @@ router.patch(
         return;
       }
 
-      const db = getDB();
+      const db = await getDB();
       const result = await db.collection<Book>("books").findOneAndUpdate(
         { _id: new ObjectId(id), isActive: true },
         { $set: { ...parsed.data, updatedAt: new Date() } },
@@ -231,7 +231,7 @@ router.delete(
         return;
       }
 
-      const db = getDB();
+      const db = await getDB();
       const result = await db.collection<Book>("books").findOneAndUpdate(
         { _id: new ObjectId(id), isActive: true },
         { $set: { isActive: false, updatedAt: new Date() } },

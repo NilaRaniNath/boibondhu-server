@@ -35,7 +35,7 @@ router.post("/", requireAuth, async (req: Request, res: Response): Promise<void>
     }
 
     const { items, shippingAddress, paymentMethod } = parsed.data;
-    const db = getDB();
+    const db = await getDB();
     const booksCol = db.collection<Book>("books");
     const ordersCol = db.collection<Order>("orders");
 
@@ -120,7 +120,7 @@ router.post("/", requireAuth, async (req: Request, res: Response): Promise<void>
 
 router.get("/me", requireAuth, async (req: Request, res: Response): Promise<void> => {
   try {
-    const db = getDB();
+    const db = await getDB();
     const orders = await db
       .collection<Order>("orders")
       .find({ userId: new ObjectId(req.user!.userId) })
@@ -136,7 +136,7 @@ router.get("/me", requireAuth, async (req: Request, res: Response): Promise<void
 
 router.get("/", requireAuth, requireAdmin, async (_req: Request, res: Response): Promise<void> => {
   try {
-    const db = getDB();
+    const db = await getDB();
 
     const orders = await db
       .collection<Order>("orders")
@@ -184,7 +184,7 @@ router.patch(
         return;
       }
 
-      const db = getDB();
+      const db = await getDB();
       const result = await db.collection<Order>("orders").findOneAndUpdate(
         { _id: new ObjectId(id) },
         { $set: { status: status as OrderStatus, updatedAt: new Date() } },
