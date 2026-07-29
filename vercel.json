@@ -1,16 +1,3 @@
 {
-  "version": 2,
-  "buildCommand": "npx esbuild src/index.ts --bundle --platform=node --outfile=bundle.js",
-  "builds": [
-    {
-      "src": "index.js",
-      "use": "@vercel/node",
-      "config": {
-        "includeFiles": ["bundle.js"]
-      }
-    }
-  ],
-  "routes": [
-    { "src": "/(.*)", "dest": "index.js" }
-  ]
+  "version": 2
 }
