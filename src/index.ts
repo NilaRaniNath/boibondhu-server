@@ -14,17 +14,10 @@ app.use(cors({ origin: process.env.CLIENT_URL || "http://localhost:3000", creden
 app.use(express.json());
 app.use(cookieParser());
 
-let dbConnected = false;
-app.use(async (_req, _res, next) => {
-  if (!dbConnected) {
-    try {
-      await connectDB();
-      dbConnected = true;
-    } catch (err) {
-      console.error("Failed to connect to DB:", err);
-    }
-  }
-  next();
+connectDB().catch(err => console.error("DB connection failed:", err));
+
+app.get("/api/debug", (_req, res) => {
+  res.json({ env: Object.keys(process.env).sort(), node: process.version, platform: process.platform });
 });
 
 app.get("/", (_req, res) => {
