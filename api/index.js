@@ -1,4 +1,4 @@
 module.exports = (req, res) => {
   res.setHeader('Content-Type', 'application/json');
-  res.end(JSON.stringify({ ok: true, url: req.url }));
+  res.end(JSON.stringify({ ok: true, url: req.url, method: req.method }));
 };
