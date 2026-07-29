@@ -1,4 +1,3 @@
-const express = require('express');
-const app = express();
-app.get('/', (_req, res) => res.json({ message: 'Hello from Vercel' }));
-module.exports = app;
+module.exports = (req, res) => {
+  res.status(200).json({ message: 'Hello from Vercel', url: req.url });
+};
