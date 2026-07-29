@@ -1,3 +1,2 @@
-module.exports = (req, res) => {
-  res.end('ok');
-};
+const app = require("../dist/index").default;
+module.exports = app;

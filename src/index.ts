@@ -16,6 +16,9 @@ app.use(cookieParser());
 
 connectDB().catch(err => console.error("DB connection failed:", err));
 
+app.get("/.well-known/appspecific/com.chrome.devtools.json", (_req, res) => res.status(204).end());
+app.get("/favicon.ico", (_req, res) => res.status(204).end());
+
 app.get("/api/debug", (_req, res) => {
   res.json({ env: Object.keys(process.env).sort(), node: process.version, platform: process.platform });
 });
@@ -35,7 +38,6 @@ app.use("/api/reviews", reviewRoutes);
 app.use("/api/admin", adminRoutes);
 
 if (!process.env.VERCEL) {
-  connectDB().catch(console.error);
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);

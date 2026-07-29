@@ -16,6 +16,13 @@ app.use(cors({ origin: process.env.CLIENT_URL || "http://localhost:3000", creden
 app.use(express.json());
 app.use(cookieParser());
 
+app.get("/", (_req, res) => {
+  res.json({ success: true, message: "BoiBondhu API is running" });
+});
+
+app.get("/.well-known/appspecific/com.chrome.devtools.json", (_req, res) => res.status(204).end());
+app.get("/favicon.ico", (_req, res) => res.status(204).end());
+
 app.get("/api/health", (_req, res) => {
   res.json({ status: "ok", message: "BoiBondhu API is running" });
 });
