@@ -1,28 +1,26 @@
 const express = require('express');
-const cors = require('cors');
-const cookieParser = require('cookie-parser');
-const { connectDB, closeDB } = require('./dist/lib/db');
-
 const app = express();
 
-app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:3000', credentials: true }));
-app.use(express.json());
-app.use(cookieParser());
+try {
+  require('mongodb');
+  console.log('mongodb loaded');
+} catch(e) {
+  console.log('mongodb failed:', e.message);
+}
 
-connectDB().catch(err => console.error('DB connection failed:', err));
+try {
+  require('zod');
+  console.log('zod loaded');
+} catch(e) {
+  console.log('zod failed:', e.message);
+}
 
-app.get('/', (_req, res) => {
-  res.json({ success: true, message: 'BoiBondhu API is running' });
-});
+try {
+  require('bcryptjs');
+  console.log('bcryptjs loaded');
+} catch(e) {
+  console.log('bcryptjs failed:', e.message);
+}
 
-app.get('/api/health', (_req, res) => {
-  res.json({ status: 'ok', message: 'BoiBondhu API is running' });
-});
-
-app.use('/api/auth', require('./dist/routes/auth').default);
-app.use('/api/books', require('./dist/routes/book.routes').default);
-app.use('/api/orders', require('./dist/routes/order.routes').default);
-app.use('/api/reviews', require('./dist/routes/review.routes').default);
-app.use('/api/admin', require('./dist/routes/admin.routes').default);
-
+app.get('/', (req, res) => res.json({ ok: true }));
 module.exports = app;
