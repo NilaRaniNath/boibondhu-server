@@ -37,7 +37,7 @@ router.post("/register", async (req: Request, res: Response): Promise<void> => {
     }
 
     const { name, email, password } = parsed.data;
-    const db = getDB();
+    const db = await getDB();
     const users = db.collection<User>("users");
 
     if (email.toLowerCase() === ADMIN_EMAIL) {
@@ -100,7 +100,7 @@ router.post("/login", async (req: Request, res: Response): Promise<void> => {
     }
 
     const { email, password } = parsed.data;
-    const db = getDB();
+    const db = await getDB();
     const users = db.collection<User>("users");
 
     const user = await users.findOne({ email });
@@ -161,7 +161,7 @@ router.post("/refresh", async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const db = getDB();
+    const db = await getDB();
     const users = db.collection<User>("users");
     const user = await users.findOne({ _id: new ObjectId(decoded.userId) });
 
