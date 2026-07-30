@@ -2,7 +2,7 @@ import { MongoClient, Db } from "mongodb";
 
 let client: MongoClient;
 let db: Db;
-  let connecting: Promise<Db> | null = null;
+let connecting: Promise<Db> | null = null;
 
 async function connect(): Promise<Db> {
   const MONGODB_URI = process.env.MONGODB_URI;
@@ -19,6 +19,7 @@ async function connect(): Promise<Db> {
   await newClient.connect();
   client = newClient;
   db = client.db(DB_NAME);
+  console.log(`Connected to MongoDB: ${DB_NAME}`);
   return db;
 }
 
