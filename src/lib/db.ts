@@ -2,11 +2,9 @@ import { MongoClient, Db } from "mongodb";
 
 let client: MongoClient;
 let db: Db;
-let connecting: Promise<Db> | null = null;
+  let connecting: Promise<Db> | null = null;
 
-export async function connectDB(): Promise<Db> {
-  if (db) return db;
-
+async function connect(): Promise<Db> {
   const MONGODB_URI = process.env.MONGODB_URI;
   const DB_NAME = process.env.DB_NAME || "boibondhu";
 
@@ -14,39 +12,27 @@ export async function connectDB(): Promise<Db> {
     throw new Error("MONGODB_URI is not set in environment variables");
   }
 
-  const MAX_RETRIES = 5;
-  const RETRY_DELAY_MS = 3000;
+  const newClient = new MongoClient(MONGODB_URI, {
+    serverSelectionTimeoutMS: 5000,
+    connectTimeoutMS: 5000,
+  });
+  await newClient.connect();
+  client = newClient;
+  db = client.db(DB_NAME);
+  return db;
+}
 
-  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
-    try {
-      const newClient = new MongoClient(MONGODB_URI, {
-        serverSelectionTimeoutMS: 10000,
-        connectTimeoutMS: 10000,
-      });
-      await newClient.connect();
-      client = newClient;
-      db = client.db(DB_NAME);
-      console.log(`Connected to MongoDB: ${DB_NAME} (attempt ${attempt})`);
-      connecting = null;
-      return db;
-    } catch (err) {
-      console.error(`MongoDB connection attempt ${attempt}/${MAX_RETRIES} failed:`, (err as Error).message);
-      if (attempt < MAX_RETRIES) {
-        console.log(`Retrying in ${RETRY_DELAY_MS / 1000}s...`);
-        await new Promise((r) => setTimeout(r, RETRY_DELAY_MS));
-      } else {
-        connecting = null;
-        throw err;
-      }
-    }
-  }
+export async function connectDB(): Promise<Db> {
+  if (db) return db;
+  if (connecting) return connecting;
 
-  throw new Error("MongoDB connection failed after all retries");
+  connecting = connect().finally(() => { connecting = null; });
+  return connecting;
 }
 
 export async function getDB(): Promise<Db> {
   if (db) return db;
-  throw new Error("Database not initialized. Call connectDB() first.");
+  return connectDB();
 }
 
 export async function closeDB(): Promise<void> {
