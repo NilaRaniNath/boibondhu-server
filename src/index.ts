@@ -7,6 +7,7 @@ import bookRoutes from "./routes/book.routes";
 import orderRoutes from "./routes/order.routes";
 import reviewRoutes from "./routes/review.routes";
 import adminRoutes from "./routes/admin.routes";
+import contactRoutes from "./routes/contact.routes";
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.use("/api/books", bookRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/contact", contactRoutes);
 
 if (!process.env.VERCEL) {
   const PORT = process.env.PORT || 5000;
